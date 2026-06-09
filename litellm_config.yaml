@@ -1,0 +1,63 @@
+# LiteLLM Proxy Configuration
+# Goal: WebStorm (Azure format) → LiteLLM on localhost:4000 → custom OpenAI-compatible endpoint
+#
+# HOW TO USE:
+#   1. Copy .env.example to .env and fill in your real values
+#   2. Run: start.sh
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+model_list:
+  # "model_name" here becomes the Azure "Deployment name" you enter in WebStorm.
+  # You can add as many models/deployments as you need.
+  - model_name: deepseek-v4-pro
+    litellm_params:
+      model: openai/deepseek-v4-pro
+      api_base: os.environ/CUSTOM_OPENAI_API_BASE
+      api_key:  os.environ/CUSTOM_OPENAI_API_KEY
+      supports_vision: false
+
+  - model_name: deepseek-v4-flash
+    litellm_params:
+      model: openai/deepseek-v4-flash
+      api_base: os.environ/CUSTOM_OPENAI_API_BASE
+      api_key:  os.environ/CUSTOM_OPENAI_API_KEY
+      supports_vision: false
+
+  - model_name: mimo-v2.5-pro-ultraspeed
+    litellm_params:
+      model: openai/mimo-v2.5-pro-ultraspeed
+      api_base: os.environ/CUSTOM_OPENAI_API_BASE
+      api_key:  os.environ/CUSTOM_OPENAI_API_KEY
+      supports_vision: false
+
+  - model_name: minimax-m3
+    litellm_params:
+      model: openai/minimax-m3
+      api_base: os.environ/CUSTOM_OPENAI_API_BASE
+      api_key:  os.environ/CUSTOM_OPENAI_API_KEY
+      supports_vision: false
+
+  - model_name: kimi-k2.6
+    litellm_params:
+      model: openai/kimi-k2.6
+      api_base: os.environ/CUSTOM_OPENAI_API_BASE
+      api_key:  os.environ/CUSTOM_OPENAI_API_KEY
+      supports_vision: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# General proxy settings
+# ─────────────────────────────────────────────────────────────────────────────
+general_settings:
+  port: 4001
+
+  # No master_key = no proxy-level auth. LiteLLM accepts all requests locally.
+  # The backend API key is handled separately via CUSTOM_OPENAI_API_KEY in .env.
+  # Drop unknown params that some clients (e.g. Copilot) may send
+  drop_params: true
+
+litellm_settings:
+  # Return Azure-style error shapes so WebStorm doesn't reject them
+  enable_azure_ad_token_refresh: false
+  # Increase timeout if your backend is slow
+  request_timeout: 120
